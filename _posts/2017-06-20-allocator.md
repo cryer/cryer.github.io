@@ -1,7 +1,7 @@
 ---
 layout: post
 title: C++内存管理
-description: C++内存管理
+description: C++ 内存管理
 
 ---
 
@@ -76,7 +76,7 @@ public:
 
     void* operator new(size_t);
     void  operator delete(void*); 
-      
+
 private:
     Bar* next;
     static Bar* freeList;
@@ -127,9 +127,9 @@ void Bar::operator delete(void *p)
 class allocator 
 {
 private:
-  	struct obj {
-    	struct obj* next; 
-  	};	
+      struct obj {
+        struct obj* next; 
+      };    
 public:
     void* allocate(size_t);
     void  deallocate(void*, size_t);  
@@ -140,28 +140,28 @@ private:
 
 void* allocator::allocate(size_t size)
 {
-  	obj* p;
+      obj* p;
 
-  	if (!freeList) {
-      	size_t chunk = CHUNK * size;
-      	freeList = p = (obj*)malloc(chunk);  
+      if (!freeList) {
+          size_t chunk = CHUNK * size;
+          freeList = p = (obj*)malloc(chunk);  
         // 串联所有块   
-      	for (int i=0; i < (CHUNK-1); ++i)	{  
-           	p->next = (obj*)((char*)p + size);
-           	p = p->next;
-      	}
-      	p->next = nullptr;        
-  	}
-  	p = freeList;
-  	freeList = freeList->next;
- 
-  	return p;
+          for (int i=0; i < (CHUNK-1); ++i)    {  
+               p->next = (obj*)((char*)p + size);
+               p = p->next;
+          }
+          p->next = nullptr;        
+      }
+      p = freeList;
+      freeList = freeList->next;
+
+      return p;
 }
 
 void allocator::deallocate(void* p, size_t)
 {
-  	((obj*)p)->next = freeList;
-  	freeList = (obj*)p;
+      ((obj*)p)->next = freeList;
+      freeList = (obj*)p;
 }
 ```
 
@@ -176,14 +176,14 @@ void allocator::deallocate(void* p, size_t)
 ```cpp
 class Foo {
 public: 
-	long L;
-	string str;
-	static allocator myAlloc;
+    long L;
+    string str;
+    static allocator myAlloc;
 public:
-	Foo(long l) : L(l) {  }
-	static void* operator new(size_t size)
-  	{     return myAlloc.allocate(size);  	}
-  	static void  operator delete(void* pdead, size_t size)
+    Foo(long l) : L(l) {  }
+    static void* operator new(size_t size)
+      {     return myAlloc.allocate(size);      }
+      static void  operator delete(void* pdead, size_t size)
     {     return myAlloc.deallocate(pdead, size);  }
 };
 allocator Foo::myAlloc;
@@ -194,15 +194,15 @@ allocator Foo::myAlloc;
 ```cpp
 #define DECLARE_ALLOCATOR()\
 public:\
-	static void* operator new(size_t size)\
-  	{     return myAlloc.allocate(size);  	}\
-  	static void  operator delete(void* pdead, size_t size)\
+    static void* operator new(size_t size)\
+      {     return myAlloc.allocate(size);      }\
+      static void  operator delete(void* pdead, size_t size)\
     {     return myAlloc.deallocate(pdead, size);  }\
 protected:\
-	static allocator myAlloc;
+    static allocator myAlloc;
 
 #define IMPLEMENT_ALLOC(class_name)\
-	allocator class_name::myAlloc;
+    allocator class_name::myAlloc;
 ```
 
 然后在需要的类中使用：
@@ -211,10 +211,10 @@ protected:\
 class Foo {
 DECLARE_ALLOCATOR()
 public: 
-	long L;
-	string str;
+    long L;
+    string str;
 public:
-	Foo(long l) : L(l) {  }
+    Foo(long l) : L(l) {  }
 
 };
 IMPLEMENT_ALLOC(Foo)
