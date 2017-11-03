@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 实现一个文件传输工具
-description: 实现一个文件传输工具
+description: 实现一个 文件传输工具
 
 ---
 
@@ -20,8 +20,6 @@ description: 实现一个文件传输工具
 - 支持断点续传
 
 **传输协议**：先发送文件名（最大255字节），再发送文件大小（8字节，`long long`），然后发送文件内容。
-
-
 
 简单说明部分思路：
 
@@ -479,8 +477,6 @@ Detected directory archive. Extracting...
 Directory extracted successfully.
 ```
 
-
-
 测试发送文件和断点重续（windows下为例）：
 
 - 接收方：`file_transfer.exe -s 1234`
@@ -518,7 +514,7 @@ Received: 73580544 / 110306771 bytes (66.7%)
 Connection closed or error. Received 73580544/110306771 bytes.
 
 File received successfully: test.pdf 
- 
+
 重新接收后： 
 Server listening on port 1234...
 Client connected.
@@ -562,13 +558,8 @@ int is_directory(const char* path) {
 
 CL编译命令：`cl file_transfer.c ws2_32.lib`
 
-
-
 - 文件在传输过程中可能因网络抖动、缓冲区错误、磁盘写入失败等原因导致数据损坏,即使文件看似100%传输完成，也可能已经损坏，因此最好需要加上校验，用来验证文件完整性，如果检查文件不完整，则提示文件损坏，要求重传。比如利用`MD5校验`的简单思路：客户端计算本地MD5->发送服务器，服务器接收文件计算本地MD5->和客户端对比，断点重续则校验已有的数据部分。MD5有很多轻量级开源库实现，可以随意选择即可。
 
 - 本传输工具采用明文传输，有安全风险，可以考虑使用`OpenSSL`加密传输
 
 - 工具是一对一传输，可以考虑使用多线程同时接受多个线程的并发传输文件，既可以是多个客户端，也可以是同一个客户端但是多线程，比如一个大文件分割成线程数量的块，每个线程负责一个块的传输，可以充分利用多核的优势。
-
-
-
