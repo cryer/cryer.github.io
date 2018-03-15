@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 实现一个简单的深度学习框架
-description: 实现一个简单的深度学习框架
+description: 实现一个简单的 深度学习框架
 
 ---
 
