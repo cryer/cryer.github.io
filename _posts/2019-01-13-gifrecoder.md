@@ -1,7 +1,7 @@
 ---
 layout: post
 title: GIF录制程序
-description: GIF录制程序
+description: GIF 录制程序
 
 ---
 
