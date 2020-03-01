@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 从头开始实现一个transformer
-description: 从头开始实现一个transformer
+description: 从头开始实现一个 transformer
 
 ---
 
