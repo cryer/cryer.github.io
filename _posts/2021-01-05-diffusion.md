@@ -1,7 +1,7 @@
 ---
 layout: post
 title: diffusion扩散模型
-description: diffusion扩散模型
+description: diffusion 扩散模型
 
 ---
 <script>
