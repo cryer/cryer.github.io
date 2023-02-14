@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 如何提高YOLO帧率
-description: 如何提高YOLO帧率
+description: 如何提高 YOLO帧率
 
 ---
 
