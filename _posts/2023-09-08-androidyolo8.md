@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 目标检测安卓部署
-description: 目标检测安卓部署
+description: 目标检测 安卓部署
 
 ---
 
