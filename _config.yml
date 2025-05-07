@@ -1,5 +1,5 @@
 # Basic
-title: 石星
+title: Star
 subtitle: 个人站
 description: 欢迎来到我的个人站~
 # 头像里面的标题
@@ -18,7 +18,7 @@ social:
     # weibo: 5366874726
     github: cryer
     # twitter:
-    mail: 935211204@qq.com
+    mail: sxkurumi@gmail.com
 
 # 百度统计
 # 使用博客模板请去掉或者更换 id
@@ -60,7 +60,6 @@ nav:
     - {title: 所有文章, description: archive, url: '/archive'}
     - {title: 标签, description: tags, url: '/tags'}
     - {title: 关于我, description: about, url: '/about'}
-    - {title: 导师博客, description: teacher, url: 'http://xuepro.xcguan.net/'}
 
 
 # Pagination
