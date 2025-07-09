@@ -296,7 +296,7 @@ asyncio.get_event_loop().run_forever()
 
 然后你就可以得到这样的效果：
 
-![](C:\Users\kurumi\Desktop\post\1.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/1.jpg)
 
 ### 总结
 
