@@ -38,7 +38,7 @@ _asm_add:
 
 - 参数的位置是这样计算的，这只是32位程序下，64位会使用寄存器传前几个参数
   
-  ![](C:\Users\kurumi\Desktop\post\3.jpg)
+  ![](https://github.com/cryer/cryer.github.io/raw/master/image/3.jpg)
 
 C语言书函数`main.c`，就简单调用函数即可：
 
