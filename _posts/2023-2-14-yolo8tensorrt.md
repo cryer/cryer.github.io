@@ -90,7 +90,7 @@ while cap.isOpened():
 
     TensorRT是Nvidia官方的推理框架，可以有效加速模型的推理，不单单是YOLO，任何的神经网络都可以加速推理。基本的步骤：首先正常使用深度学习框架训练模型，比如使用pytorch训练，生成pt模型参数。然后导入为ONNX的开放交换格式，pytorch自身就支持导出ONNX模型，然后把ONNX模型进一步转换成TensorRT模型，使用第三方库tensorrt库即可转换，然后利用tensorrt推理TensorRT模型即可。
 
-方便的是，我们不需要这么复杂，因为`ultalytics`本身就支持tensorrt模型的推理，因此我们只需要转换成tensorrt模型即可。
+方便的是，我们不需要这么复杂，因为`ultralytics`本身就支持tensorrt模型的推理，因此我们只需要转换成tensorrt模型即可。
 
 #### 使用TensorRT具体步骤
 
@@ -124,6 +124,6 @@ yolo detect predict model=yolov8x.engine source="bus.jpg" device=0
 
 ### 结果
 
-因为我用的是笔记本进行推理，且笔记本GPU很老，本地YOLO帧率不加任何优化的情况下，使用s模型，平均帧只有28帧。仅仅使用tensorrt模型，在colab上推理之后，帧率就可以提高到超过100帧。如果进一步使用imgsz缩小输入尺寸为原来的一半，帧率更是可以逼近150帧，我相信如果使用更好的GPU的话，突破200帧也很简单。
+因为我写这篇博客的时候在外地，只能用GPU（1050Ti）很老的笔记本进行推理，本地YOLO帧率不加任何优化的情况下，使用s模型，平均帧只有28帧。仅仅使用tensorrt模型，在colab上推理之后，帧率就可以提高到超过100帧。如果进一步使用imgsz缩小输入尺寸为原来的一半，帧率更是可以逼近150帧，使用更好的GPU的话，突破200帧是很简单的。
 
 
