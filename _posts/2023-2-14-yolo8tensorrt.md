@@ -90,7 +90,7 @@ while cap.isOpened():
 
     TensorRT是Nvidia官方的推理框架，可以有效加速模型的推理，不单单是YOLO，任何的神经网络都可以加速推理。基本的步骤：首先正常使用深度学习框架训练模型，比如使用pytorch训练，生成pt模型参数。然后导入为ONNX的开放交换格式，pytorch自身就支持导出ONNX模型，然后把ONNX模型进一步转换成TensorRT模型，使用第三方库tensorrt库即可转换，然后利用tensorrt推理TensorRT模型即可。
 
-方便的是，我们不需要这么负责，因为`ultalytics`本身就支持tensorrt模型的推理，因此我们只需要转换成tensorrt模型即可。
+方便的是，我们不需要这么复杂，因为`ultalytics`本身就支持tensorrt模型的推理，因此我们只需要转换成tensorrt模型即可。
 
 #### 使用TensorRT具体步骤
 
