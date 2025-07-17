@@ -10,6 +10,6 @@ description: 目标检测安卓部署
 
 ### demo
 
-#### 简答的demo演示：
+#### 简单的demo演示：
 
 ![](https://github.com/cryer/cryer.github.io/raw/master/image/10.gif)
