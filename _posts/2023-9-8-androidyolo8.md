@@ -7,4 +7,4 @@ description: 目标检测安卓部署
 
 ### demo
 
-![](C:\Users\kurumi\Desktop\post\10.gif)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/10.gif)
