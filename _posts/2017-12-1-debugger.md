@@ -641,4 +641,32 @@ int main(int argc, char* argv[]) {
 
 ```
 
+**简单测试文件**
+```c
+#include <stdio.h>
+
+void loop_function(int count) {
+    int i = 0;
+    int total = 0;
+    for (i = 1; i <= count; ++i) {
+        total += i;
+        printf("i = %d, total = %d\n", i, total);
+    }
+}
+
+int main() {
+    int start_value = 5;
+    printf("Debugger test program started.\n");
+    loop_function(start_value);
+    printf("Debugger test program finished.\n");
+    return 0;
+}
+```
+
+### 编译和运行
+编译：`gcc -o debugger debugger.c -ldwarf -lelf` 测试文件`gcc -g -o test_program test.c`
+运行：`./debugger test_program`
+
+简单效果展示：
+![](https://github.com/cryer/cryer.github.io/raw/master/image/111.jpg)
 
