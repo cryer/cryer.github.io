@@ -185,7 +185,7 @@ CMD ["python", "app.py"]
 
 运行`docker build -t pytorch-classifier:fp16 .`构建测试镜像，`pytorch`因为我们只需要运行，不用来开发，所以选择runtime版本即可，即使这样，这个基础镜像也有3GB的大小，如果遇到网络问题就使用镜像源或者找到资源下载到本地后，使用`docker load -i` 进行本地加载镜像。镜像构建后有将近14个GB的大小：
 
-![](C:\Users\kurumi\Desktop\post\113.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/113.jpg)
 
 镜像生成后，启动容器：
 
@@ -199,11 +199,11 @@ CMD ["python", "app.py"]
 
 我的测试图片是一张小狗图片：
 
-![](C:\Users\kurumi\Desktop\post\test.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/test.jpg)
 
 测试结果：
 
-![](C:\Users\kurumi\Desktop\post\112.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/112.jpg)
 
 ```
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
