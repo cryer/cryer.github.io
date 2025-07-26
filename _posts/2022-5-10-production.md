@@ -500,6 +500,7 @@ scrape_configs:
 主要就是2点：
 - 设置报警规则
 - 配置报警管理器，Alertmanager也是一个容器
+  
 首先就是在`prometheus.yml`配置文件中，增加报警规则的路径设置和报警管理器的配置：
 ```
 # 报警规则文件路径
@@ -528,6 +529,7 @@ rules:
 ```
 这就是一个基本的报警规则编写，当服务器持续5分钟CPU占用超过80%时，触发报警。
 继续编写`config.yml`报警管理器的配置文件,同样简单示例：
+
 ```
      global:
     resolve_timeout: 5m
@@ -542,7 +544,9 @@ rules:
  receivers:
      - name: '通知的邮箱' 
 ```
+
 最后在docker compose配置文件中，加上Alertmanager服务：
+
 ```
  alertmanager:
     image: prom/alertmanager:latest
@@ -553,6 +557,7 @@ rules:
     volumes:
       - ./config.yml:/etc/alertmanager/config.yml
 ```
+
 **API**
 Alertmanager: http://localhost:9093，在这里看到触发的报警。
 
