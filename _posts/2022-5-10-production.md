@@ -409,7 +409,7 @@ pytorch运行仅需：
 经过分段构建后的镜像体积可以缩小`70%`，然后正常启动容器即可完成产品级的部署，启动容器时需要将目录下的nginx配置文件挂载到镜像容器中的`/etc/nginx`目录下，比如` -v $(pwd)/nginx-conf:/etc/nginx/conf.d`, 挂载自定义配置。
 
 ### 监控
-项目部署完成后，基本生产部署是完成了，但是整体的生产工作只完成了一半，还需要对项目进行持续的维护，维护首先就需要监控。可以借助开源的工业级监控库prometheus，对于python而言，就是第三方库`prometheus-client`,但是因为我们是使用flask提供API接口，则可以使用另一个专门用于flask的集成库`prometheus-flask-exporter`，prometheus有多种监控类型，比如计数，仪表盘，直方图，摘要等，可以监控多种指标，比如http的基本连接情况等，而prometheus社区维护的开源库`node-exporter`则可以监控服务器的cpu，内存，磁盘占用等硬件信息，两者可以配合使用。
+项目部署完成后，基本生产部署是完成了，但是整体的生产工作只完成了一半，还需要对项目进行持续的维护，维护首先就需要监控。可以借助开源的工业级监控库prometheus，对于python而言，就是第三方库`prometheus-client`,但是因为我们是使用flask提供API接口，则可以使用另一个专门用于flask的集成库`prometheus-flask-exporter`，prometheus有多种监控类型，比如计数，仪表盘，直方图，摘要等，可以监控多种指标，比如http的基本连接情况等，而prometheus社区维护的开源库`node-exporter`则可以监控服务器的cpu，内存，磁盘占用等硬件信息，两者可以配合使用。这个监控其实就是我前面说的运行时日志。
 简单举例：
 ```
 from flask import Flask
