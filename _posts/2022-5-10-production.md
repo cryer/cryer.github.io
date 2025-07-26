@@ -288,29 +288,57 @@ nginx -g "daemon off;"
 然后配置nginx配置文件示例：
 
 ```
- {
+ server {
     listen 80;
     server_name localhost;
+    client_max_body_size 20M;  # 允许大文件上传
+    proxy_read_timeout 300s;‌
 
     location / {
         proxy_pass http://localhost:5000;
-        ...
+        ... # 如果你需要其他配置，比如proxy_set_header之类
     }
-
-    # 静态文件缓存
-    location /static/ {
-        alias /app/static/;
-        ...
-    }
-        ...
 }
 
 
 ```
 
-监听80端口，也就是暴露给调用方的接口端口，内部5000端口除了开发部署者，无从得知，更加安全，且还可以配置负载均衡和反向代理。
+监听80端口，也就是暴露给调用方的接口端口，内部5000端口除了开发部署者，无从得知，更加安全，且还可以配置负载均衡等。这里只配置了通用的根目录，可以捕获到所有形式的API请求，但是后台flask框架只会处理/predict就是，如果需要更多的功能，修改配置文件增加更多的配置或者location即可，比如location /static/之类，或者更强壮的API，增加不同模型的接口，比如location /object_detection/配置目标检测的API接口，当然对应的flask中需要增加/object_detection的处理，内部调用目标检测的模型进行推理，而不是图像分类模型。
+上面只是http的server中的配置，为了生产中更好的处理API请求，还需要配置`worker_connections , worker_processes, use epoll`等，`worker_connections`表示工作进程数（通常等于CPU核心数），需要配置在nginx配置文件的全局位置，`worker_processes, use epoll`表示单个工作进程并发连接上限和使用epoll端口复用，需要配置在`events`块中，大致如下：
+```
+# /etc/nginx/nginx.conf 主配置文件
 
+# [全局配置域] - 直接位于配置文件顶部
+worker_processes 4;           # 工作进程数
+worker_rlimit_nofile 65535;   # 进程最大文件描述符数
 
+# [events块] - 必须显式声明
+events {
+    worker_connections 4096;  # 单个工作进程并发连接上限 
+    use epoll;                # epoll端口复用
+    multi_accept on;          # 一次性接受所有新连接 
+}
+http{
+...
+server{
+...
+}
+...
+}
+```
+
+具体更多的nginx配置就不再赘述，可以自行了解，整套系统主要的流程如下：
+```
+ Client->>Nginx: POST /predict (image)
+  Nginx->>Gunicorn: 转发至 5000 端口
+  Gunicorn->>Flask: 调用预测接口
+  Flask->>PyTorch: 执行推理
+  PyTorch-->>Flask: 返回预测结果
+  Flask-->>Gunicorn: JSON响应
+  Gunicorn-->>Nginx: 传回代理
+  Nginx-->>Client: 返回分类结果
+```
+应该足够清晰了。
 
 #### 分段构建
 
@@ -380,7 +408,7 @@ pytorch运行仅需：
 
 而使用`COPY --from=builder /app .`则会将运行程序，服务启动文件，配置文件等拷贝到新环境。接着新环境安装Gunicorn和nginx之后，启动服务即可。
 
-经过分段构建后的镜像体积可以缩小`70%`，然后正常启动容器即可完成产品级的部署。
+经过分段构建后的镜像体积可以缩小`70%`，然后正常启动容器即可完成产品级的部署，启动容器时需要将目录下的nginx配置文件挂载到镜像容器中的`/etc/nginx`目录下，比如` -v $(pwd)/nginx-conf:/etc/nginx/conf.d`, 挂载自定义配置。
 
 
 
