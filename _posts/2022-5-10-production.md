@@ -580,6 +580,16 @@ volumes:
 **API**
 接着使用默认用户名/密码: admin/admin，登录Grafana: http://localhost:3000，UI界面中添加Prometheus数据源，地址选择Prometheus的地址http://prometheus:9090，然后保存。最后选择你想要显示的仪表盘的样式，可以从grafana.com查找，就可以非常直观的用导入的仪表盘样式，查看监控数据了。
 
+### 总体架构
+所以现在的总体架构是这样的：
+
+- Flask App : AI项目的内部API接口，使用Gunicorn运行，集成 prometheus_flask_exporter，通过 /metrics端点暴露HTTP请求相关的指标
+- Node Exporter: 作为一个独立的容器运行，暴露服务器的CPU、内存、磁盘等硬件指标
+- Prometheus: 核心监控服务器。定期从Flask应用和Node Exporter的 /metrics  拉取（scrape）指标数据并存储
+- Grafana:数据可视化平台。连接到Prometheus数据源，通过丰富的仪表盘（Dashboard）展示监控数据
+- Alertmanager: 报警处理中心。Prometheus根据预设的报警规则将报警发送给Alertmanager，后者负责去重、分组并发送通知
+- Nginx: 作为反向代理，和整个AI项目的外部暴露API接口，将外部请求转发给Gunicorn运行的Flask应用
+
 ### 其他
 
 - 如果是多机或者集群推理的话，可能需要使用到kubernetes，kubernetes配合prometheus也属于是工业级的标准
