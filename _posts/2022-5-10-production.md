@@ -492,11 +492,11 @@ scrape_configs:
 接下来启动所有docker compose的服务即可完成部署，使用命令`docker-compose up -d`，当然还有一点，之前的flask的Dockerfile中的CMD启动服务shell，同时启动Gunicorn和nginx服务的命令就不需要了，因为compose配置文件中已经执行了，注释掉即可。
 
 **访问API**
-  - http://localhost即可访问flask应用，因为http默认端口就是80，和nginx监听端口一致，配合POST方法传输图片表单就可以进行图像分类并获取结果
-  -  Prometheus: http://localhost:9090，Prometheus UI中，进入 "Status" -> "Targets"，能看到 flask-app 和 node-exporter 两个任务，状态都是 "UP"
+  - `http://localhost`即可访问flask应用，因为http默认端口就是80，和nginx监听端口一致，配合POST方法传输图片表单就可以进行图像分类并获取结果
+  -  Prometheus:` http://localhost:9090`，Prometheus UI中，进入 "Status" -> "Targets"，能看到 flask-app 和 node-exporter 两个任务，状态都是 "UP"
 
 #### 进一步
-前面使用Prometheus只用到了**自动监控指标 + 可视化查看指标**，而Prometheus还有一个功能，那就是报警功能，设置某一指标数据异常的时候进行报警，既可以简单在报警的端口查看报警信息，也可以设置邮件形式发送报警信息到对应邮箱。关于Prometheus报警的配置方法，简单说明，不深入讲解。
+前面使用Prometheus只用到了**自动监控指标 + 可视化查看指标**，而Prometheus还有一个功能，那就是**报警功能**，设置某一指标数据异常的时候进行报警，既可以简单在报警的端口查看报警信息，也可以设置邮件形式发送报警信息到对应邮箱。关于Prometheus报警的配置方法，简单说明，不深入讲解。
 主要就是2点：
 - 设置报警规则
 - 配置报警管理器，Alertmanager也是一个容器
@@ -559,7 +559,7 @@ rules:
 ```
 
 **API**
-Alertmanager: http://localhost:9093，在这里看到触发的报警。
+Alertmanager: `http://localhost:9093`，在这里看到触发的报警。
 
 为了监控指标显示信息更加的直观，还可以配合使用Grafana，Grafana是一个可视化的观测平台，可以接受Prometheus的监控指标数据。Grafana的使用很简单，也有官方的docker镜像，只需要在docker compose配置文件中添加,拉取官方镜像，配置端口映射和挂载卷，然后依赖prometheus即可，比如：
   ```
@@ -578,7 +578,7 @@ volumes:
     grafana_data: {}
 ```
 **API**
-接着使用默认用户名/密码: admin/admin，登录Grafana: http://localhost:3000，UI界面中添加Prometheus数据源，地址选择Prometheus的地址http://prometheus:9090，然后保存。最后选择你想要显示的仪表盘的样式，可以从grafana.com查找，就可以非常直观的用导入的仪表盘样式，查看监控数据了。
+接着使用默认用户名/密码: admin/admin，登录Grafana: `http://localhost:3000`，UI界面中添加Prometheus数据源，地址选择Prometheus的地址`http://prometheus:9090`，然后保存。最后选择你想要显示的仪表盘的样式，可以从grafana.com查找，就可以非常直观的用导入的仪表盘样式，查看监控数据了。
 
 ### 总体架构
 所以现在的总体架构是这样的：
@@ -595,3 +595,6 @@ volumes:
 - 如果是多机或者集群推理的话，可能需要使用到kubernetes，kubernetes配合prometheus也属于是工业级的标准
 
 - 推理不一定非要依赖pytorch，可以转换模型为onnx，然后生产部署使用onnxruntime-gpu推理
+
+- 虽然上面从开发到测试到部署到监控，都是手动完成的，但是实际上生产中都会设计成pipline自动流水线，并且开发流水线和部署流水线分开，也就是`CI/CD`持续集成和持续部署的思想。`CI`简单来说就是每次`push`以及协作开发者的`PR`都会自动触发集成流水线，包含自动拉取本次的提交内容，自动运行测试（包括代码质量测试，比如pylint测试，单元测试，比如unittest和pytest，集成测试，也就是整体功能和性能的测试），通过后自动合并代码，代码会严格分类成主分支，开发分支，测试分支等。然后`CD`持续部署流水线则是自动从主分支拉取最新项目代码，自动根据Dockerfile编译生成最新镜像，然后运行一些基本的部署的测试，最后自动推送到远程镜像库中。`Github Actions`就是一个很方便的不需要借助第三方的`CI`工作流工具，感兴趣的读者可以去仔细了解下。
+
