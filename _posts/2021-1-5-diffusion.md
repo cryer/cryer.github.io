@@ -237,7 +237,7 @@ def sample(model, diffusion, n_samples=16, device='cuda'):
 
 下图是训练5个epoch后，采样的16张图片：
 
-![](C:\Users\kurumi\Desktop\post\mnist1.png)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/mnist1.png)
 
 #### 
 
@@ -470,11 +470,11 @@ class ResidualUNet(nn.Module):
 
 使用这个新模型后，训练5个epoch后，使用16个随机噪声采样后的图片效果如下：
 
-![](C:\Users\kurumi\Desktop\post\mnist2.png)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/mnist2.png)
 
 换一个更复杂的数据集`CIFAR-100`,训练20个epoch后，效果如下：
 
-![](C:\Users\kurumi\Desktop\post\cifar100.png)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/cifar100.png)
 
 效果也还可以，训练时间毕竟不算长，模型也并不是很深。
 
@@ -498,7 +498,7 @@ class ResidualUNet(nn.Module):
   
   因此我们需要寻求新的神经网络建模，而正向扩散的过程实则是一个马尔科夫链，也就是t时刻的图像只受t-1时刻图像的影响，因此我们条件加上X0原始图像，并不影响分布，即`q(xt-1 | xt,x0)`不影响分布，而这个分布可以进一步计算，Xt，X0同时发生的联合概率分布乘以 Xt，X0条件下的Xt-1的条件概率分布，就等于X0，Xt-1，Xt三者同时发生的联合概率分布，因此三者的联合概率分布除以Xt，X0的联合概率分布就是初始目标分布。然后再进一步，两个联合概率，还可以展开成条件发生的概率乘以该条件下剩下目标发生的概率。我们发现分解后分布，都是前面能计算的分布。而这三个分布都是高斯分布，经过互相乘法除法之后，总的分布也是高斯分布，并且分布的均值和方差可求。而计算后的方差其实是固定系数组成的，可以看成常数，因此我们神经网络新的建模就可以选择对分布的均值进行建模。而均值包含x0，也是未知的，所幸前面正向加噪的公式中，我们可以把X0用Xt表示，最后均值化简如下：
   
-  ![](C:\Users\kurumi\Desktop\post\141.jpg)
+  ![](https://github.com/cryer/cryer.github.io/raw/master/image/141.jpg)
   
   因此可以看出，对均值建模实则就是对高斯噪声建模，因为其他系数都是常数，而xt是网络的输入。
   
@@ -507,5 +507,6 @@ class ResidualUNet(nn.Module):
   下个问题是我们输出的现在变成噪声了，反向扩散如何获得噪声图像呢？还是用到前面提到的`z=μ + σ*ε`，可以用0-1高斯分布表示任何的高斯分布，现在网络输出噪声，导入到上面的均值公式中，就可以计算均值。那方差怎么表示？前面我让读者记住一点，那就是正向加噪过程中，系数βt（即1-αt）就相当于方差，因此这里用的就是βt。
   
   这同时也解释了另一个常见问题，为什么要添加随机扰动，也就是一个0-1噪声，因为必须添加，否则就破坏了噪声图像的高斯分布了（因为`z=μ + σ*ε`才能保证高斯分布），而且丧失了一定随机性。
+
 
 
