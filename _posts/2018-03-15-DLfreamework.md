@@ -550,7 +550,7 @@ def softmax_loss(np.ndarray[np.float32_t, ndim=2] scores, np.ndarray[np.int32_t,
     return loss, d_scores
 ```
 
-- 编译CUDA和CYTHON
+- 编译CUDA和CYTHON，编译完成后可以生成CUDA的共享库和`cnn_layers.cpython-3xx-x86_64-linux-gnu.so`这样的共享库，后者可以直接python ` import cnn_layers`导入，然后调用cython封装后的函数
 
 ```python
 # setup.py
@@ -836,5 +836,6 @@ cd python
 python setup.py build_ext --inplace
 python train_mnist.py
 ```
+
 
 
