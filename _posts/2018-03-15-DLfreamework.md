@@ -114,7 +114,7 @@ cudnnHandle_t& get_cudnn_handle() {
     static bool initialized = false;
     if (!initialized) {
         cudnnSafeCall(cudnnCreate(&cudnn_handle));
-        // 注册一个函数，在程序正常终止时调用，用于清理资源
+        // 注册一个函数，在程序正常终止时调用，清理资源
         atexit([]{ cudnnDestroy(cudnn_handle); });
         initialized = true;
     }
@@ -413,7 +413,6 @@ cimport numpy as np
 
 # ** C++ 函数声明 **
 cdef extern from "../cpp/layers_wrapper.h":
-    # **[修改]** 移除了 init_gpu 和 finish_gpu
     void conv_forward_gpu(float *y, const float *x, const float *k, int B, int M, int C, int H, int W, int K) noexcept nogil
     void conv_backward_gpu(float *dx, float *dk, const float *dy, const float *x, const float *k, int B, int M, int C, int H, int W, int K) noexcept nogil
     void max_pool_forward_gpu(float *y, const float *x, int *pool_idx, int B, int C, int H, int W, int K) noexcept nogil
@@ -559,15 +558,13 @@ from setuptools import setup, Extension
 from Cython.Build import cythonize
 import numpy
 
-# ** 自动编译CUDA代码 (Linux版本) **
 print("--- 开始CUDA代码编译 (Linux) ---")
-# --- 1. 定义路径 ---
+# --- 1. 路径 ---
 setup_dir = os.path.dirname(os.path.abspath(__file__))
 cpp_dir = os.path.abspath(os.path.join(setup_dir, "..", "cpp"))
 build_dir = os.path.join(cpp_dir, "build")
 cuda_source = os.path.join(cpp_dir, "layers.cu")
 
-# 在Linux上，共享库通常以 'lib' 开头，以 '.so' 结尾
 lib_name = "gpucnn"
 lib_filename = f"lib{lib_name}.so"
 lib_path = os.path.join(build_dir, lib_filename)
@@ -577,8 +574,7 @@ if not os.path.exists(build_dir):
     print(f"创建编译输出目录: {build_dir}")
     os.makedirs(build_dir)
 
-# --- 3. 构建NVCC编译命令 (Linux) ---
-# -Xcompiler -fPIC: 生成位置无关代码，是创建共享库所必需的。
+# --- 3. 构建NVCC编译命令 ---
 compile_command = (
     f'nvcc --shared -Xcompiler -fPIC -std=c++11 '
     f'-o "{lib_path}" '
@@ -624,7 +620,6 @@ extensions = [
         libraries=[lib_name],
         extra_compile_args=["-std=c++11", "-O2"],
         # -Wl,-rpath: 将库的运行时搜索路径嵌入到扩展中。
-        # 这能确保在导入时能找到我们自己编译的 libgpucnn.so。
         extra_link_args=[f'-Wl,-rpath,{build_dir}']
     )
 ]
@@ -839,5 +834,6 @@ python train_mnist.py
 
 ### 总结
 只是一个简单的深度学习库，距离完善的深度学习框架还有很多需要做的，比如至少还需要实现计算图和自动求导。这里只是一个简单的例子，主要展示python高层和gpu底层矩阵运算是如何连接起来的，可以对深度学习框架的底层构造有一个更深的理解。
+
 
 
