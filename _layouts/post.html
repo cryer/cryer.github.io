@@ -24,3 +24,17 @@ layout: default
 
 {% include new-old.html %}
 {% include comments.html %}
+
+<!-- ✅ 添加 Mermaid 支持 -->
+<script src="/js/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose' // 避免某些渲染限制
+      });
+    }
+  });
+</script>
