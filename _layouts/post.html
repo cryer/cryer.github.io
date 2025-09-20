@@ -26,6 +26,7 @@ layout: default
 {% include comments.html %}
 
 <!-- ✅ 添加 Mermaid 支持 -->
+{% if page.mermaid %}
 <script src="/js/mermaid.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -38,3 +39,4 @@ layout: default
     }
   });
 </script>
+{% endif %}
