@@ -116,20 +116,20 @@ def send_heartbeat(self):
 
 ### 架构解析
 
-服务器：
+**服务器**：
 
 - **游戏服务器**：处理客户端连接，推送热更新
 - **Web配置界面**：基于Flask的管理后台，实时发布热补丁
 - **热更新配置管理**：存储脚本逻辑和背景配置
 
-客户端：
+**客户端**：
 
 - **Pygame UI界面**：显示移动的小球和背景
 - **热更新接收器**：监听服务器推送的更新
 - **动态脚本执行器**：使用`exec()`动态加载新逻辑
 - **资源管理器**：处理背景图片的动态加载
 
-架构图：
+**架构图**：
 
 ```
 +---------------------+     TCP Socket     +---------------------+
@@ -149,7 +149,7 @@ def send_heartbeat(self):
 ```
 
 
-热更新流程图：
+**热更新流程图（以图片热补丁为例）**：
 
 ```mermaid
 sequenceDiagram
@@ -1235,35 +1235,36 @@ if __name__ == "__main__":
 
 先看服务器端的web热更新配置页面：
 
-![](C:\Users\kurumi\Desktop\post\151.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/151.jpg)
 
 这就是游戏核心逻辑的更新热补丁配置，原来是默认直线的运动轨迹，如下所示：
 
-![](C:\Users\kurumi\Desktop\post\51.gif)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/51.gif)
 
 现在上面的脚本发布后（同时修改版本）：
 
-![](C:\Users\kurumi\Desktop\post\52.gif)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/52.gif)
 
 客户端在游戏中途，实时就修改了内部的运行逻辑，不需要任何更新下载，不需要重启游戏。同时，我们也注意到，背景就是默认创建的线条背景，说明背景加载成功。
 
 再看背景热补丁部分：
 
-![](C:\Users\kurumi\Desktop\post\152.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/152.jpg)
 
 让图片转化成Base64的格式进行传输，客户端本地甚至都不需要对应的资源文件，所以你在自己玩的游戏中会发现有的背景UI图片，解包都找不到，就是因为不需要本地有资源，服务器端也可以实时热补丁发布。当然大部分情况下，资源文件还是简易客户端下载好的，正常游戏都是一次更新会把接下来更新的资源下载好。
 
 我们修改图片，看看效果：
 
-![](C:\Users\kurumi\Desktop\post\155.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/155.jpg)
 
 可以看到背景实时发生了变化，同样，我们情况Base64框，用纯RGB来修改背景：
 
-![](C:\Users\kurumi\Desktop\post\154.jpg)
+![](https://github.com/cryer/cryer.github.io/raw/master/image/154.jpg)
 
 可以看到同样没有任何问题。
 
 ### 总结
 
 博客主要讲解了热补丁更新的方式，如果看完了这个代码例子，相信就会对这种更新方式有很好的了解。再简单说下版本增量更新，版本增量更新其实就是计算二进制的差异，比如**BSDiff**算法和**XDelta**算法，都是如此，服务器端计算差异之后，客户端下载差异更新补丁，然后用对应算法的工具合成即可，配合上完整度校验，就是一个增量更新的方式。现代游戏一般都是增量补丁，版本清单，CDN分发来进行版本更新。
+
 
