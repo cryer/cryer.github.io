@@ -30,23 +30,24 @@ layout: default
 <script src="/assets/js/mermaid.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // ✅ 先把所有 <code class="language-mermaid"> 替换成 <div class="mermaid">
     document.querySelectorAll('pre code.language-mermaid').forEach(function(block) {
-      // 创建新 div.mermaid
+      // 安全检查：确保父节点是 <pre>
+      if (block.parentNode.tagName !== 'PRE') return;
+
       var div = document.createElement('div');
       div.className = 'mermaid';
-      div.textContent = block.textContent;
+      div.textContent = block.textContent.trim();
 
-      // 替换掉原来的 <pre><code>...</code></pre>
-      block.parentNode.parentNode.replaceWith(div);
+      // ✅ 只替换 <pre> 标签，保留其他内容
+      block.parentNode.replaceWith(div);
     });
 
-    // ✅ 再初始化 Mermaid
     if (typeof mermaid !== 'undefined') {
       mermaid.initialize({
         startOnLoad: true,
         theme: 'default',
-        securityLevel: 'loose'
+        securityLevel: 'loose',
+        logLevel: 0 // 调试用，上线可设为 0
       });
     }
   });
