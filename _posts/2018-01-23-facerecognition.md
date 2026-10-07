@@ -165,8 +165,3 @@ FaceNet算法有如下要点：
 * 直接取LFW图片的中间部分进行训练，效果98.87左右。
 * 使用额外的人脸对齐工具，效果99.63左右，超过deepid。
 
-# 结果展示
-
-完整代码参考我的[github](https://github.com/cryer/face_recognition)，下面给出代码运行效果：
-
-![](https://github.com/cryer/face_recognition/raw/master/image/1.png)
