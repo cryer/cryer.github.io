@@ -1,0 +1,20 @@
+{% if site.giscus.repo_id and site.giscus.category_id %}
+<section class="post-comments">
+  <script src="https://giscus.app/client.js"
+          data-repo="{{ site.giscus.repo | escape }}"
+          data-repo-id="{{ site.giscus.repo_id | escape }}"
+          data-category="{{ site.giscus.category | escape }}"
+          data-category-id="{{ site.giscus.category_id | escape }}"
+          data-mapping="{{ site.giscus.mapping | escape }}"
+          data-strict="{{ site.giscus.strict | escape }}"
+          data-reactions-enabled="{{ site.giscus.reactions_enabled | escape }}"
+          data-emit-metadata="{{ site.giscus.emit_metadata | escape }}"
+          data-input-position="{{ site.giscus.input_position | escape }}"
+          data-theme="{{ site.giscus.theme | escape }}"
+          data-lang="{{ site.giscus.lang | escape }}"
+          data-loading="{{ site.giscus.loading | escape }}"
+          crossorigin="anonymous"
+          async>
+  </script>
+</section>
+{% endif %}

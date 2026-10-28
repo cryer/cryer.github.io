@@ -9,9 +9,19 @@ avatarDesc: 深度学习 / 机器学习
 url: "https://cryer.github.io"
 
 # Comment
-comment:
-    # disqus: leopard
-    #  uyan: 2143225  # 有言id,登录有言官网申请
+giscus:
+    repo: cryer/cryer.github.io
+    repo_id: MDEwOlJlcG9zaXRvcnkxMTUxMTE5MzY=
+    category: General
+    category_id: "DIC_kwDOBtx4AM4DJz0n"
+    mapping: pathname
+    strict: "1"
+    reactions_enabled: "1"
+    emit_metadata: "0"
+    input_position: bottom
+    theme: preferred_color_scheme
+    lang: zh-CN
+    loading: lazy
 
 # Social
 social:
